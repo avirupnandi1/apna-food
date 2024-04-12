@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "333176764375",
+    "project_id": "apna-food-23dcb",
+    "storage_bucket": "apna-food-23dcb.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:333176764375:android:b41d69f4e2fb2fa3e9bd92",
+        "android_client_info": {
+          "package_name": "com.example.apna_food"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC_MBBU8rO__jmySidJmn0HyBVqGS0oMSw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

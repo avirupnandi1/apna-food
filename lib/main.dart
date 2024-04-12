@@ -1,8 +1,13 @@
+import 'package:apna_food/pages/bottomnav.dart';
+import 'package:apna_food/pages/details.dart';
 import 'package:apna_food/pages/home.dart';
+import 'package:apna_food/pages/login.dart';
+import 'package:apna_food/pages/onboard.dart';
 import 'package:flutter/material.dart';
+import 'package:apna_food/pages/signup.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
@@ -18,7 +23,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: MyHomePage(),
+      home: Onboard(),
     );
   }
 }
