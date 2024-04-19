@@ -1,4 +1,6 @@
 // import 'package:firebase_auth/firebase_auth.dart';
+import 'package:apna_food/pages/bottomnav.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:apna_food/widgets/widget_support.dart';
 
@@ -17,27 +19,28 @@ class _LogInState extends State<LogIn> {
   TextEditingController useremailcontroller = new TextEditingController();
   TextEditingController userpasswordcontroller = new TextEditingController();
 
-  // userLogin() async {
-  //   try {
-  //     await FirebaseAuth.instance
-  //         .signInWithEmailAndPassword(email: email, password: password);
-  //         Navigator.push(context, MaterialPageRoute(builder: (context)=> BottomNav()));
-  //   } on FirebaseAuthException catch (e) {
-  //     if (e.code == 'user-not-found') {
-  //       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-  //           content: Text(
-  //         "No User Found for that Email",
-  //         style: TextStyle(fontSize: 18.0, color: Colors.black),
-  //       )));
-  //     }else if(e.code=='wrong-password'){
-  //        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-  //           content: Text(
-  //         "Wrong Password Provided by User",
-  //         style: TextStyle(fontSize: 18.0, color: Colors.black),
-  //       )));
-  //     }
-  //   }
-  // }
+  userLogin() async {
+    try {
+      await FirebaseAuth.instance
+          .signInWithEmailAndPassword(email: email, password: password);
+      Navigator.push(
+          context, MaterialPageRoute(builder: (context) => BottomNav()));
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'user-not-found') {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            content: Text(
+          "No User Found for that Email",
+          style: TextStyle(fontSize: 18.0, color: Colors.black),
+        )));
+      } else if (e.code == 'wrong-password') {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            content: Text(
+          "Wrong Password Provided by User",
+          style: TextStyle(fontSize: 18.0, color: Colors.black),
+        )));
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -162,7 +165,7 @@ class _LogInState extends State<LogIn> {
                                     password = userpasswordcontroller.text;
                                   });
                                 }
-                                // userLogin();
+                                userLogin();
                               },
                               child: Material(
                                 elevation: 5.0,

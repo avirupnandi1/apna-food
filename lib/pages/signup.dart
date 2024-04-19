@@ -1,5 +1,10 @@
+import 'package:apna_food/pages/bottomnav.dart';
+import 'package:apna_food/service/database.dart';
+import 'package:apna_food/service/shared_pref.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:apna_food/widgets/widget_support.dart';
+import 'package:random_string/random_string.dart';
 
 class Signup extends StatefulWidget {
   const Signup({super.key});
@@ -9,12 +14,62 @@ class Signup extends StatefulWidget {
 }
 
 class _SignupState extends State<Signup> {
-  String email = "", password = "";
+  String email = "", password = "", name = "";
 
-  final _formkey = GlobalKey<FormState>();
+  final _formkey =
+      GlobalKey<FormState>(); //if the user entered everything correctly
 
+  TextEditingController usernamecontroller = new TextEditingController();
   TextEditingController useremailcontroller = new TextEditingController();
   TextEditingController userpasswordcontroller = new TextEditingController();
+
+  registration() async {
+    if (password != null) {
+      try {
+        UserCredential userCredential = await FirebaseAuth.instance
+            .createUserWithEmailAndPassword(email: email, password: password);
+
+        ScaffoldMessenger.of(context).showSnackBar((SnackBar(
+            content: Text(
+          "Registered Successfully!",
+          style: TextStyle(fontSize: 20),
+        ))));
+        String Id = randomAlphaNumeric(10);
+
+        Map<String, dynamic> addUserInfo = {
+          "Name": usernamecontroller.text,
+          "Email": useremailcontroller.text,
+          "Wallet": "0",
+          "Id": Id,
+        };
+
+        await databaseMethod().addUserDetail(addUserInfo, Id);
+
+        await SharedPrefHelper().saveUserName(usernamecontroller.text);
+        await SharedPrefHelper().saveUserEmail(useremailcontroller.text);
+        await SharedPrefHelper().saveUserWallet('0');
+        await SharedPrefHelper().saveUserId(Id);
+
+        Navigator.pushReplacement(
+            context, MaterialPageRoute(builder: (context) => BottomNav()));
+      } on FirebaseException catch (e) {
+        if (e.code == 'weak-password') {
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            content: const Text(
+              'Password Provided is too Weak',
+              style: TextStyle(fontSize: 19),
+            ),
+          ));
+        } else if (e.code == 'email-already-in-use') {
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+              backgroundColor: Colors.orangeAccent,
+              content: const Text('Password Provided is too Weak',
+                  style: TextStyle(fontSize: 19))));
+        }
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     var container = Container(
@@ -134,8 +189,15 @@ class _SignupState extends State<Signup> {
                               height: 20.0,
                             ),
                             GestureDetector(
-                              onTap: () {
-                                // Navigator.push(context, MaterialPageRoute(builder: (context)=> ForgotPassword()));
+                              onTap: () async {
+                                if (_formkey.currentState!.validate()) {
+                                  setState(() {
+                                    email = useremailcontroller.text;
+                                    name = usernamecontroller.text;
+                                    password = userpasswordcontroller.text;
+                                  });
+                                }
+                                registration();
                               },
                               child: Container(
                                   alignment: Alignment.topRight,
